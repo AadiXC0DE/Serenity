@@ -157,6 +157,20 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
     </motion.button>
   );
 
+  // Simple loading spinner component
+  const LoadingSpinner = () => (
+    <div className="flex items-center justify-center py-8">
+      <div className="relative">
+        <div 
+          className="w-8 h-8 border-4 border-solid rounded-full animate-spin"
+          style={{ 
+            borderColor: `${colors.sage[200]} ${colors.sage[200]} ${colors.sage[600]} ${colors.sage[200]}`
+          }}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -897,26 +911,7 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
                     </p>
 
                     {loadingMemories ? (
-                      <div className="flex items-center justify-center py-8">
-                        <div className="flex gap-2">
-                          {[0, 1, 2].map((i) => (
-                            <motion.div
-                              key={i}
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: colors.sage[400] }}
-                              animate={{ 
-                                scale: [1, 1.5, 1],
-                                opacity: [0.5, 1, 0.5]
-                              }}
-                              transition={{ 
-                                duration: 1, 
-                                repeat: Infinity, 
-                                delay: i * 0.2 
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                      <LoadingSpinner />
                     ) : memories.length === 0 ? (
                       <div 
                         className="text-center py-8 rounded-xl border-2 border-dashed"
