@@ -361,7 +361,14 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
                       `0 20px 40px -10px ${colors.sage[200]}40`
                     ]
                   }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ 
+                    boxShadow: {
+                      duration: 4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      type: "keyframes"
+                    }
+                  }}
                 >
                   {/* Breathing animation overlay */}
                   <motion.div
@@ -817,9 +824,16 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             animate={{ 
               boxShadow: [
                 `0 0 0 0 ${colors.lavender[200]}40`,
-                `0 0 0 20px ${colors.lavender[200]}00`,
-                `0 0 0 0 ${colors.lavender[200]}40`
+                `0 0 0 20px ${colors.lavender[200]}00`
               ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                type: "keyframes"
+              }
             }}
           >
             <Volume2 size={36} style={{ color: colors.lavender[700] }} />
@@ -1006,7 +1020,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             transition={{ duration: 3, repeat: Infinity }}
           >
             Powered by advanced AI • Secured by Supabase • Designed for you
-          </motion.p>
+          </p>
         </div>
       </motion.footer>
     </div>
