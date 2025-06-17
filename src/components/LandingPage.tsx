@@ -380,7 +380,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
                   
                   {/* AI Persona Image */}
                   <img
-                    src="/src/assets/ChatGPT Image Jun 17 2025 from illustration request.png"
+                    src="/src/assets/Brand.png"
                     alt="Serenity - Your AI Therapy Companion"
                     className="w-full h-full object-cover"
                   />
@@ -1020,7 +1020,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             transition={{ duration: 3, repeat: Infinity }}
           >
             Powered by advanced AI • Secured by Supabase • Designed for you
-          </p>
+          </motion.p>
         </div>
       </motion.footer>
     </div>
