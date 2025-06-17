@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, Volume2, Bot, LogOut, Check, Settings, Trash2, Edit3, Save, Plus, Minus } from 'lucide-react';
+import { X, User, Volume2, Bot, LogOut, Check, Settings, Trash2, Edit3, Save, Plus, Minus, Coins, Infinity } from 'lucide-react';
 import { User as UserType, UserPreferences, UserMemory } from '../types';
 import { memoryService } from '../services/memoryService';
+import { creditsService } from '../services/creditsService';
 import { colors, textColors } from '../styles/colors';
 
 interface SettingsModalProps {
@@ -19,7 +20,7 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [memories, setMemories] = useState<UserMemory[]>([]);
   const [loadingMemories, setLoadingMemories] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'voice' | 'bot' | 'memories'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'voice' | 'bot' | 'memories' | 'credits'>('profile');
 
   // Load memories when memories tab is opened
   useEffect(() => {
@@ -135,7 +136,7 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
     label, 
     icon: Icon 
   }: { 
-    id: 'profile' | 'voice' | 'bot' | 'memories'; 
+    id: 'profile' | 'voice' | 'bot' | 'memories' | 'credits'; 
     label: string; 
     icon: any; 
   }) => (
@@ -214,6 +215,7 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
               {/* Tab Navigation */}
               <div className="flex flex-wrap gap-2 mb-6">
                 <TabButton id="profile" label="Profile" icon={User} />
+                <TabButton id="credits" label="Credits" icon={Coins} />
                 <TabButton id="voice" label="Voice" icon={Volume2} />
                 <TabButton id="bot" label="Bot Style" icon={Bot} />
                 <TabButton id="memories" label="Memories" icon={Edit3} />
@@ -365,6 +367,160 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
                   </motion.div>
                 )}
 
+                {/* Credits Tab */}
+                {activeTab === 'credits' && (
+                  <motion.div 
+                    className="space-y-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    {/* Credits Overview */}
+                    <motion.div 
+                      className="p-6 rounded-2xl border text-center"
+                      style={{ 
+                        backgroundColor: user.unlimitedCredits ? colors.sage[50] : colors.primary[50],
+                        borderColor: user.unlimitedCredits ? colors.sage[200] : colors.primary[200]
+                      }}
+                      whileHover={{ 
+                        borderColor: user.unlimitedCredits ? colors.sage[300] : colors.primary[300],
+                        boxShadow: `0 4px 12px ${user.unlimitedCredits ? colors.sage[100] : colors.primary[100]}`
+                      }}
+                    >
+                      <div 
+                        className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                        style={{ backgroundColor: user.unlimitedCredits ? colors.sage[200] : colors.primary[200] }}
+                      >
+                        {user.unlimitedCredits ? (
+                          <Infinity size={32} style={{ color: colors.sage[700] }} />
+                        ) : (
+                          <Coins size={32} style={{ color: colors.primary[700] }} />
+                        )}
+                      </div>
+                      
+                      <h3 className="text-2xl font-bold mb-2" style={{ color: textColors.primary }}>
+                        {user.unlimitedCredits ? 'Unlimited Credits' : `${user.credits} Credits`}
+                      </h3>
+                      
+                      <p className="text-sm mb-4" style={{ color: textColors.secondary }}>
+                        {user.unlimitedCredits 
+                          ? 'You have unlimited access to all features!'
+                          : creditsService.getCreditsStatusMessage(user.credits, user.unlimitedCredits)
+                        }
+                      </p>
+
+                      {!user.unlimitedCredits && (
+                        <div className="text-xs space-y-1" style={{ color: textColors.muted }}>
+                          <p>Used today: {user.creditsUsedToday} credits</p>
+                          <p>Credits reset daily at midnight</p>
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* Credit Costs */}
+                    <div className="space-y-4">
+                      <h3 className="font-medium" style={{ color: textColors.primary }}>
+                        Credit Costs
+                      </h3>
+                      
+                      <div className="space-y-3">
+                        <motion.div 
+                          className="flex items-center justify-between p-4 rounded-xl border"
+                          style={{ 
+                            backgroundColor: colors.sage[50],
+                            borderColor: colors.sage[200]
+                          }}
+                          whileHover={{ 
+                            backgroundColor: colors.sage[100],
+                            borderColor: colors.sage[300]
+                          }}
+                        >
+                          <div>
+                            <span className="text-sm font-medium" style={{ color: textColors.primary }}>
+                              Text Messages
+                            </span>
+                            <p className="text-xs" style={{ color: textColors.muted }}>
+                              Chat conversations
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold" style={{ color: colors.sage[600] }}>
+                              FREE
+                            </span>
+                            <span className="text-xs px-2 py-1 rounded-full" style={{ 
+                              backgroundColor: colors.sage[200],
+                              color: colors.sage[700]
+                            }}>
+                              Limited Time
+                            </span>
+                          </div>
+                        </motion.div>
+
+                        <motion.div 
+                          className="flex items-center justify-between p-4 rounded-xl border"
+                          style={{ 
+                            backgroundColor: colors.lavender[50],
+                            borderColor: colors.lavender[200]
+                          }}
+                          whileHover={{ 
+                            backgroundColor: colors.lavender[100],
+                            borderColor: colors.lavender[300]
+                          }}
+                        >
+                          <div>
+                            <span className="text-sm font-medium" style={{ color: textColors.primary }}>
+                              Voice Responses
+                            </span>
+                            <p className="text-xs" style={{ color: textColors.muted }}>
+                              AI speaks your responses
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Coins size={16} style={{ color: colors.lavender[600] }} />
+                            <span className="text-lg font-bold" style={{ color: colors.lavender[600] }}>
+                              10
+                            </span>
+                          </div>
+                        </motion.div>
+                      </div>
+                    </div>
+
+                    {/* Upgrade Notice */}
+                    {!user.unlimitedCredits && (
+                      <motion.div 
+                        className="p-6 rounded-2xl border"
+                        style={{ 
+                          backgroundColor: colors.primary[50],
+                          borderColor: colors.primary[200]
+                        }}
+                        whileHover={{ 
+                          backgroundColor: colors.primary[100],
+                          borderColor: colors.primary[300]
+                        }}
+                      >
+                        <h3 className="font-medium mb-3" style={{ color: textColors.primary }}>
+                          Want Unlimited Access?
+                        </h3>
+                        <p className="text-sm mb-4" style={{ color: textColors.secondary }}>
+                          Upgrade to Pro for unlimited conversations, voice responses, and advanced features.
+                        </p>
+                        <motion.button
+                          className="w-full py-3 rounded-xl font-medium transition-all duration-300"
+                          style={{ 
+                            backgroundColor: colors.primary[200],
+                            color: colors.primary[700]
+                          }}
+                          whileHover={{ backgroundColor: colors.primary[300] }}
+                          whileTap={{ scale: 0.98 }}
+                          disabled
+                        >
+                          Pro Plan Coming Soon - $5/month
+                        </motion.button>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                )}
+
                 {/* Voice Settings Tab */}
                 {activeTab === 'voice' && (
                   <motion.div 
@@ -442,6 +598,32 @@ export function SettingsModal({ isOpen, user, onClose, onUpdatePreferences, onLo
                             <span>Slow</span>
                             <span>Normal</span>
                             <span>Fast</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Voice Credits Warning */}
+                    {user.preferences.voiceEnabled && !user.unlimitedCredits && (
+                      <motion.div 
+                        className="p-4 rounded-xl border"
+                        style={{ 
+                          backgroundColor: colors.accent.cream,
+                          borderColor: colors.accent.peach
+                        }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Coins size={16} style={{ color: colors.accent.peach }} />
+                          <div>
+                            <p className="text-sm font-medium" style={{ color: textColors.primary }}>
+                              Voice uses credits
+                            </p>
+                            <p className="text-xs" style={{ color: textColors.muted }}>
+                              Each voice response costs 10 credits. You have {user.credits} credits remaining.
+                            </p>
                           </div>
                         </div>
                       </motion.div>

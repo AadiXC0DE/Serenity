@@ -1,3 +1,5 @@
+import { creditsService } from './creditsService';
+
 class ElevenLabsService {
   private apiKey: string;
   private baseUrl = 'https://api.elevenlabs.io/v1';
@@ -9,10 +11,19 @@ class ElevenLabsService {
     this.apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY || 'demo-key';
   }
 
-  async textToSpeech(text: string): Promise<string | null> {
+  async textToSpeech(text: string, userId?: string): Promise<string | null> {
+    // Check credits before proceeding (if userId provided)
+    if (userId) {
+      const canUseVoice = await creditsService.checkCredits(userId, 'VOICE_RESPONSE');
+      if (!canUseVoice) {
+        console.log('❌ Insufficient credits for voice response');
+        throw new Error('INSUFFICIENT_CREDITS');
+      }
+    }
+
     if (this.apiKey === 'demo-key') {
       console.log('Demo mode: Using browser speech synthesis');
-      return this.useBrowserSpeech(text);
+      return this.useBrowserSpeech(text, userId);
     }
 
     try {
@@ -39,16 +50,30 @@ class ElevenLabsService {
         throw new Error(`ElevenLabs API error: ${response.status}`);
       }
 
+      // Deduct credits after successful API call
+      if (userId) {
+        await creditsService.useCredits(userId, 'VOICE_RESPONSE');
+      }
+
       const audioBlob = await response.blob();
       return URL.createObjectURL(audioBlob);
     } catch (error) {
       console.error('ElevenLabs API error:', error);
-      return this.useBrowserSpeech(text);
+      return this.useBrowserSpeech(text, userId);
     }
   }
 
-  private useBrowserSpeech(text: string): string | null {
+  private async useBrowserSpeech(text: string, userId?: string): Promise<string | null> {
     if ('speechSynthesis' in window) {
+      // Deduct credits for browser speech as well
+      if (userId) {
+        const result = await creditsService.useCredits(userId, 'VOICE_RESPONSE');
+        if (!result.success) {
+          console.log('❌ Insufficient credits for browser speech');
+          throw new Error('INSUFFICIENT_CREDITS');
+        }
+      }
+
       // Stop any existing speech first
       this.stopAudio();
       

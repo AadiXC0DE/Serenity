@@ -72,12 +72,41 @@ class AuthService {
           email: profile.email,
           name: profile.name,
           createdAt: new Date(profile.created_at),
-          preferences: profile.preferences
+          preferences: profile.preferences,
+          credits: profile.credits || 0,
+          creditsUsedToday: profile.credits_used_today || 0,
+          unlimitedCredits: profile.unlimited_credits || false
         };
-        console.log('✅ User profile loaded:', this.currentUser.name);
+        console.log('✅ User profile loaded:', this.currentUser.name, `(${this.currentUser.credits} credits)`);
       }
     } catch (error) {
       console.error('❌ Error loading user profile:', error);
+    }
+  }
+
+  async refreshUserCredits(): Promise<void> {
+    if (!this.currentUser) return;
+    
+    try {
+      const { data: profile, error } = await supabase
+        .from('user_profiles')
+        .select('credits, credits_used_today, unlimited_credits')
+        .eq('id', this.currentUser.id)
+        .single();
+
+      if (error) {
+        console.error('❌ Error refreshing credits:', error);
+        return;
+      }
+
+      if (profile && this.currentUser) {
+        this.currentUser.credits = profile.credits || 0;
+        this.currentUser.creditsUsedToday = profile.credits_used_today || 0;
+        this.currentUser.unlimitedCredits = profile.unlimited_credits || false;
+        console.log('🔄 Credits refreshed:', this.currentUser.credits);
+      }
+    } catch (error) {
+      console.error('❌ Error refreshing credits:', error);
     }
   }
 
@@ -188,7 +217,10 @@ class AuthService {
             id: data.user.id,
             email: credentials.email.trim(),
             name: credentials.name.trim(),
-            preferences: defaultPreferences
+            preferences: defaultPreferences,
+            credits: 100,
+            credits_used_today: 0,
+            last_credit_reset: new Date().toISOString().split('T')[0]
           });
 
         if (profileError) {

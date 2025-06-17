@@ -14,6 +14,9 @@ export interface User {
   name: string;
   createdAt: Date;
   preferences: UserPreferences;
+  credits: number;
+  creditsUsedToday: number;
+  unlimitedCredits: boolean;
 }
 
 export interface UserPreferences {
@@ -66,4 +69,12 @@ export interface VoiceConversationState {
   isSpeaking: boolean;
   transcript: string;
   status: 'idle' | 'listening' | 'processing' | 'speaking';
+}
+
+export interface CreditUsageResult {
+  success: boolean;
+  creditsRemaining: number;
+  error?: string;
+  creditsUsed?: number;
+  unlimited?: boolean;
 }

@@ -8,6 +8,7 @@ import { ChatInterface } from './components/ChatInterface';
 import { AuthModal } from './components/AuthModal';
 import { SettingsModal } from './components/SettingsModal';
 import { VoiceConversationMode } from './components/VoiceConversationMode';
+import { CreditsDisplay } from './components/CreditsDisplay';
 
 // Services
 import { authService } from './services/authService';
@@ -15,6 +16,7 @@ import { geminiService } from './services/geminiService';
 import { elevenlabsService } from './services/elevenlabsService';
 import { memoryService } from './services/memoryService';
 import { conversationService } from './services/conversationService';
+import { creditsService } from './services/creditsService';
 
 // Types
 import { Message, User, AuthState } from './types';
@@ -173,6 +175,19 @@ function App() {
     }
   };
 
+  const refreshUserCredits = async () => {
+    if (!authState.user) return;
+    
+    await authService.refreshUserCredits();
+    const updatedUser = authService.getCurrentUser();
+    if (updatedUser) {
+      setAuthState(prev => ({
+        ...prev,
+        user: updatedUser
+      }));
+    }
+  };
+
   const handleSendMessage = async (messageText: string) => {
     if (!messageText.trim() || isTyping || !authState.user) return;
 
@@ -188,6 +203,8 @@ function App() {
     setCompanionMood('thinking');
 
     try {
+      // Text messages are free for now, so no credit check needed
+      
       // Calculate importance and save to long-term memory
       const importance = memoryService.calculateImportance(userMessage);
       await memoryService.saveMemory(authState.user.id, userMessage.content, importance);
@@ -217,6 +234,9 @@ function App() {
       const aiImportance = response.length > 100 ? 0.6 : 0.4; // Longer responses are more important
       await memoryService.saveMemory(authState.user.id, `Serenity: ${response}`, aiImportance);
 
+      // Refresh credits after message
+      await refreshUserCredits();
+
     } catch (error) {
       console.error('❌ Error generating response:', error);
       const errorMessage: Message = {
@@ -233,18 +253,46 @@ function App() {
   };
 
   const handlePlayVoice = async (text: string) => {
-    if (!authState.user?.preferences.voiceEnabled) return;
+    if (!authState.user?.preferences.voiceEnabled || !authState.user) return;
+
+    // Check if user has enough credits for voice
+    const canUseVoice = creditsService.canUseVoice(authState.user.credits, authState.user.unlimitedCredits);
+    
+    if (!canUseVoice) {
+      // Show credits exhausted message
+      const creditsMessage: Message = {
+        id: `msg_${Date.now()}_credits`,
+        content: "You've used up your voice credits, but we're giving you unlimited text conversations for a limited time! Voice features will be available in the Pro plan coming soon. 🎉",
+        sender: 'therapist',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, creditsMessage]);
+      return;
+    }
 
     try {
       setIsVoicePlaying(true);
       setCompanionMood('speaking');
       
-      const audioUrl = await elevenlabsService.textToSpeech(text);
+      const audioUrl = await elevenlabsService.textToSpeech(text, authState.user.id);
       if (audioUrl) {
         await elevenlabsService.playAudio(audioUrl);
       }
+      
+      // Refresh credits after voice usage
+      await refreshUserCredits();
     } catch (error) {
       console.error('❌ Voice playback error:', error);
+      
+      if (error instanceof Error && error.message === 'INSUFFICIENT_CREDITS') {
+        const creditsMessage: Message = {
+          id: `msg_${Date.now()}_credits`,
+          content: "You've used up your voice credits, but we're giving you unlimited text conversations for a limited time! Voice features will be available in the Pro plan coming soon. 🎉",
+          sender: 'therapist',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, creditsMessage]);
+      }
     } finally {
       setIsVoicePlaying(false);
       setCompanionMood('listening');
@@ -487,6 +535,13 @@ function App() {
                   Your AI Therapy Companion
                 </p>
               </div>
+
+              {/* Credits Display */}
+              <CreditsDisplay 
+                credits={authState.user.credits}
+                unlimitedCredits={authState.user.unlimitedCredits}
+                onRefresh={refreshUserCredits}
+              />
               
               {/* Voice Mode Toggle */}
               <motion.button
