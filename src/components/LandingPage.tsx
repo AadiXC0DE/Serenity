@@ -81,14 +81,43 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
 
   return (
     <div 
-      className="min-h-screen overflow-x-hidden"
+      className="min-h-screen overflow-x-hidden relative"
       style={{ 
         background: `linear-gradient(135deg, ${colors.primary[50]}, ${colors.sage[50]}, ${colors.lavender[50]})`
       }}
     >
+      {/* Bolt Hackathon Badge - Fixed Position */}
+      <motion.div
+        className="fixed top-4 right-4 z-50"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+      >
+        <motion.a
+          href="https://bolt.new/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+          whileHover={{ 
+            scale: 1.05,
+            rotate: 5
+          }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <img
+            src="/black_circle_360x360.png"
+            alt="Powered by Bolt.new - Made in Bolt Hackathon"
+            className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
+            style={{
+              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
+            }}
+          />
+        </motion.a>
+      </motion.div>
+
       {/* Modern Navigation Bar */}
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
+        className="fixed top-0 left-0 right-0 z-40 px-6 py-4"
         style={{ 
           backgroundColor: `${colors.neutral[50]}F0`,
           backdropFilter: 'blur(20px)',
