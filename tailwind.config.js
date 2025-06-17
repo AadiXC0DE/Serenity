@@ -39,7 +39,7 @@ export default {
           200: '#DCDCF7',  // Light lavender
           300: '#D2D2F4',  // Medium lavender
           400: '#C8C8F1',  // Deeper lavender
-          500: '#BEBEBEE', // Strong lavender
+          500: '#BEBEBE',  // Strong lavender
           600: '#B4B4EB',  // Bold lavender
           700: '#AAAAEB',  // Deep lavender
           800: '#A0A0E5',  // Very deep lavender
