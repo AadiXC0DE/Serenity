@@ -381,7 +381,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
                   
                   {/* AI Persona Image */}
                   <img
-                    src="/src/Brand.png"
+                    src={Brand}
                     alt="Serenity - Your AI Therapy Companion"
                     className="w-full h-full object-cover"
                   />
