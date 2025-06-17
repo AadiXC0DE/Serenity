@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Brain, MessageCircle, Volume2, Shield, Sparkles, ArrowRight, Star, Users, Clock, Zap, Check, X, Menu, Home, DollarSign, Layers } from 'lucide-react';
 import { colors, textColors } from '../styles/colors';
-import Brand from "./assets/Brand.png";
+import Brand from "../assets/Brand.png";
 
 interface LandingPageProps {
   onGetStarted: () => void;
