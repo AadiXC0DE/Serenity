@@ -821,7 +821,6 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
                 `0 0 0 0 ${colors.lavender[200]}40`
               ]
             }}
-            transition={{ duration: 2, repeat: Infinity }}
           >
             <Volume2 size={36} style={{ color: colors.lavender[700] }} />
           </motion.div>
