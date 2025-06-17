@@ -101,9 +101,6 @@ export function CreditsDisplay({ credits, unlimitedCredits, onRefresh }: Credits
                   </p>
                 )}
               </div>
-              <p className="text-xs mt-2" style={{ color: textColors.muted }}>
-                Click to refresh
-              </p>
             </div>
             
             {/* Tooltip arrow */}
