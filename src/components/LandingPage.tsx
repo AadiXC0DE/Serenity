@@ -936,7 +936,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       >
         <div className="max-w-4xl mx-auto">
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-6"
+            className="text-4xl md:text-5xl font-bold mb-8"
             style={{ color: textColors.primary }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -946,23 +946,166 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             Ready to Feel Understood?
           </motion.h2>
 
+          {/* Mental Health Message - Redesigned */}
           <motion.div 
-            className="text-xl mb-8 max-w-2xl mx-auto space-y-4"
-            style={{ color: textColors.secondary }}
+            className="mb-12 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <p>
-              Every year, thousands lose their lives to mental health struggles. Many suffer in silence, with no one to turn to.
-            </p>
-            <p>
-              Sometimes you just need someone to talk to — someone who listens without judgment, remembers your story, and truly cares.
-            </p>
-            <p>
-              Serenity bridges that gap. For everyone fighting their mental health battles, you're not alone anymore.
-            </p>
+            {/* Statistics Card */}
+            <motion.div
+              className="p-8 rounded-3xl mb-8 relative overflow-hidden"
+              style={{ 
+                backgroundColor: colors.neutral[50],
+                border: `2px solid ${colors.neutral[200]}`
+              }}
+              whileHover={{ 
+                scale: 1.02,
+                boxShadow: `0 20px 40px -10px ${colors.neutral[300]}40`
+              }}
+            >
+              {/* Subtle background pattern */}
+              <div className="absolute inset-0 opacity-5">
+                <div className="grid grid-cols-8 gap-4 h-full">
+                  {[...Array(32)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="rounded-full"
+                      style={{ backgroundColor: colors.sage[300] }}
+                      animate={{ 
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.6, 0.3]
+                      }}
+                      transition={{ 
+                        duration: 3 + (i % 3), 
+                        repeat: Infinity, 
+                        delay: i * 0.1 
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style={{ backgroundColor: colors.status.error }}
+                  >
+                    <Heart size={24} style={{ color: '#DC2626' }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2" style={{ color: textColors.primary }}>
+                    Thousands
+                  </h3>
+                  <p className="text-sm" style={{ color: textColors.secondary }}>
+                    lose their lives to mental health struggles every year
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style={{ backgroundColor: colors.status.warning }}
+                  >
+                    <Users size={24} style={{ color: '#D97706' }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2" style={{ color: textColors.primary }}>
+                    Many
+                  </h3>
+                  <p className="text-sm" style={{ color: textColors.secondary }}>
+                    suffer in silence with no one to turn to
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style={{ backgroundColor: colors.sage[200] }}
+                  >
+                    <MessageCircle size={24} style={{ color: colors.sage[700] }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2" style={{ color: textColors.primary }}>
+                    Someone
+                  </h3>
+                  <p className="text-sm" style={{ color: textColors.secondary }}>
+                    to talk to can make all the difference
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Bridge Message */}
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <motion.div
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: colors.sage[200] }}
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  <Heart size={20} style={{ color: colors.sage[700] }} />
+                </motion.div>
+                <motion.div
+                  className="h-0.5 w-16 rounded-full"
+                  style={{ backgroundColor: colors.sage[300] }}
+                  animate={{ scaleX: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <span className="text-2xl font-bold" style={{ color: colors.sage[600] }}>
+                  Serenity
+                </span>
+                <motion.div
+                  className="h-0.5 w-16 rounded-full"
+                  style={{ backgroundColor: colors.sage[300] }}
+                  animate={{ scaleX: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                />
+                <motion.div
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: colors.primary[200] }}
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, -5, 5, 0]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+                >
+                  <Users size={20} style={{ color: colors.primary[700] }} />
+                </motion.div>
+              </div>
+
+              <p className="text-xl font-medium mb-4" style={{ color: textColors.primary }}>
+                Serenity bridges that gap.
+              </p>
+              <p className="text-lg" style={{ color: textColors.secondary }}>
+                For everyone fighting their mental health battles, you're not alone anymore.
+              </p>
+            </motion.div>
           </motion.div>
 
           <motion.button
@@ -974,7 +1117,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             }}
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
             viewport={{ once: true }}
             whileHover={{ 
               scale: 1.05,
@@ -1011,7 +1154,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             style={{ color: textColors.muted }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
+            transition={{ delay: 1, duration: 0.8 }}
             viewport={{ once: true }}
           >
             Free to start • No credit card required • Your data stays private
