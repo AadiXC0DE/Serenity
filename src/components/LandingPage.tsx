@@ -946,16 +946,24 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             Ready to Feel Understood?
           </motion.h2>
 
-          <motion.p 
-            className="text-xl mb-8 max-w-2xl mx-auto"
+          <motion.div 
+            className="text-xl mb-8 max-w-2xl mx-auto space-y-4"
             style={{ color: textColors.secondary }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
             viewport={{ once: true }}
           >
-            Join thousands who've found their perfect AI companion. Start your journey to better mental wellness today.
-          </motion.p>
+            <p>
+              Every year, thousands lose their lives to mental health struggles. Many suffer in silence, with no one to turn to.
+            </p>
+            <p>
+              Sometimes you just need someone to talk to — someone who listens without judgment, remembers your story, and truly cares.
+            </p>
+            <p>
+              Serenity bridges that gap. For everyone fighting their mental health battles, you're not alone anymore.
+            </p>
+          </motion.div>
 
           <motion.button
             onClick={onGetStarted}
