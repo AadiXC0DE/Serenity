@@ -31,6 +31,9 @@ Many of us go through tough times without anyone to talk to. Serenity is built t
 - **Backend**: Supabase (Auth, DB, Storage)  
 - **Memory**: Supabase Vector Store  
 - **Voice**: ElevenLabs API  
-- **AI Core**: LLM-powered with custom prompting for emotional intelligence  
+- **AI Core**: LLM-powered with custom prompting for emotional intelligence 
+
+
+[ not maintained anymore ] 
 
 
